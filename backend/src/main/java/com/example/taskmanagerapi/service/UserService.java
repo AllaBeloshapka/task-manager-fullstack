@@ -4,8 +4,8 @@ import com.example.taskmanagerapi.dto.RegisterRequest;
 import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.exception.UserAlreadyExistsException;
 import com.example.taskmanagerapi.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
 
     /**
      * Registers a new user.
@@ -39,7 +39,7 @@ public class UserService {
         user.setUsername(request.getUsername());
 
         // Encrypt password before saving
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
 
         user.setRole("ROLE_USER");
         user.setEnabled(true);
@@ -48,4 +48,19 @@ public class UserService {
         // Save user to database
         return userRepository.save(user);
     }
+
+    @PostConstruct
+    public void initUser() {
+        if (userRepository.count() == 0) {
+            User user = new User();
+            user.setUsername("test");
+            user.setPassword("1234");
+            user.setRole("USER");
+            user.setEnabled(true);
+            user.setCreatedAt(LocalDateTime.now());
+
+            userRepository.save(user);
+        }
+    }
+
 }

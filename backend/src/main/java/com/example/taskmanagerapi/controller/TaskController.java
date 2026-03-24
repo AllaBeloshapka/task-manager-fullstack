@@ -8,7 +8,6 @@ import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.enums.TaskStatus;
 import com.example.taskmanagerapi.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.example.taskmanagerapi.repository.UserRepository;
 
@@ -27,61 +26,71 @@ public class TaskController {
 
     private final TaskService taskService;
     private final UserRepository userRepository;
+
     /**
-     * Create a new task for the current user.
+     * Create a new task.
      */
     @PostMapping
     public TaskResponse createTask(
-            @Valid @RequestBody TaskRequest request,
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails
+            @RequestBody TaskRequest request
     ) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No user found"));
 
         Task task = taskService.createTask(request, user);
 
         return mapToResponse(task);
     }
 
+    /**
+     * Update task.
+     */
     @PutMapping("/{id}")
     public TaskResponse updateTask(
             @PathVariable Long id,
-            @RequestBody TaskUpdateRequest request,
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails
+            @RequestBody TaskUpdateRequest request
     ) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No user found"));
 
         Task updatedTask = taskService.updateTask(id, request, user);
 
         return mapToResponse(updatedTask);
     }
-    @DeleteMapping("/{id}")
-    public void deleteTask(
-            @PathVariable Long id,
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails
-    ) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    /**
+     * Delete task.
+     */
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable Long id) {
+
+        User user = userRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No user found"));
 
         taskService.deleteTask(id, user);
     }
 
     /**
-     * Get all tasks for current user.
+     * Get all tasks.
      */
     @GetMapping
     public List<TaskResponse> getTasks(
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails,
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) String keyword
     ) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No user found"));
 
         List<Task> tasks = taskService.filterTasks(user, status, keyword);
 
@@ -91,7 +100,7 @@ public class TaskController {
     }
 
     /**
-     * Convert Task entity to TaskResponse DTO.
+     * Convert Task to DTO.
      */
     private TaskResponse mapToResponse(Task task) {
         TaskResponse response = new TaskResponse();
