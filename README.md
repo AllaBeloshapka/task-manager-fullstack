@@ -167,4 +167,4 @@ Project is fully functional and tested.
 ![Update Task](screenshots/update-task.png)
 
 ### Error Handling (400 Bad Request)
-![Error 400](screenshots/error-400.png)
+![Error 400](screenshots/error-400.png)# task-manager-fullstack
