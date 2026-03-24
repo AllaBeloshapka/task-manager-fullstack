@@ -1,0 +1,261 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* шапка */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #153e3a;
+  width: 100%;
+}
+
+/* логотип */
+.logo {
+  width: 40%;
+}
+
+/* НЕМНОГО АДАПТИВА ДЛЯ МАЛЫХ ЭКРАНОВ */
+@media (max-width: 768px) {
+  .header { padding: 12px; }     /* ДОБАВЛЕНО */
+  .logo { max-width: 90vw; }     /* ДОБАВЛЕНО: логотип не шире области просмотра */
+}
+
+/* основное поле  */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #153e3a;
+  font-size: 50px;
+  color: white;
+}
+
+/* поле для всех задач */
+.tasks {
+  width: 60%;
+  height: 300px;
+  background: #a7c2c0;
+  border-radius: 10px;
+  box-shadow: inset 0 5px 15px black;
+  padding: 40px;
+  font-size: 24px;
+  color: #000403;
+  overflow-y: auto;
+}
+
+/* блок с инструкцией модального окна */
+.info {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  padding-left: 3%;
+}
+
+/* значёк на кнопке с инсрукцией */
+.instructions {
+  width: 30px;
+  height: 30px;
+}
+
+/* кнопка для получения инструкции */
+#open-btn{
+  width: 40px;
+  height: 40px;
+  background: #153e3a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#open-btn:hover{
+  background-color: #286659; /* эффект при наведении */
+}
+
+/* поле ввода задачи */
+.input {
+  width: 55%;
+  height: 70px;
+  background: #a7c2c0;
+  border-radius: 10px;
+  box-shadow: inset 0 5px 15px black;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  outline: none;
+}
+
+/* блок кнопок плюс и минус */
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* выравнивает кнопки по центру */
+  gap: 30px; /* расстояние между кнопками */
+  margin-top: 5px;
+  padding: 10px;
+}
+
+/* кнопки */
+#btn {
+  width: 150px;         /* ← длина кнопки */
+  height: 50px;         /* ← высота кнопки */
+  font-size: 50px;      /* размер текста */
+  border-radius: 10px;  /* скруглённые углы (по желанию) */
+  background-color: #34534a; /* цвет кнопки */
+  color: rgb(250, 249, 249);
+  border: none;
+  box-shadow: inset 5px 0 10px black;
+  }
+
+#btn:hover {
+  background-color: #286659; /* эффект при наведении */
+}
+
+/* затемняющий фон на весь экран */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
+  display: none; /* изначально скрыт */
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* рамка модального окна с инструкцией */
+.modal-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: 2px solid white;
+  background-color: transparent;
+  backdrop-filter: blur(1px); /* красивое размытие позади */
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  font-size: 20px;
+  color: white;
+}
+
+/* крестик в правом верхнем углу модального окна */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* инструкция к кнопке "плюс" */
+.info-btn-plus{
+  position: relative;
+  width: 300px;
+  top: 28%;
+  left: 63%;
+}
+
+/* инструкция к кнопке "минус" */
+.info-btn-minus{
+  position: relative;
+  width: 300px;
+  top: 38%;
+  left: 15%;
+}
+
+/* инструкция к полю для ввода */
+.input_field{
+  position: relative;
+  top: 20%;
+  left: 1%;
+}
+
+/* инструкция к списку задач */
+.task_field{
+  position: relative;
+  top: 10%;
+  left: 25%;
+}
+
+/* подвал */
+.footer {
+  background-color: #0f2c29;
+  color: #99b8b5;
+  padding: 30px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.footer-section p {
+  margin: 4px 0;
+  color: #99b8b5;
+}
+
+.social-icons a {
+  font-size: 20px;
+}
+
+.footer-bottom {
+  background-color: #153e3a;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 25px;
+}
+
+

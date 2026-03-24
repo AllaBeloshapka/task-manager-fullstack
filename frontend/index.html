@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="stylec.css" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskCounter</title>
+  </head>
+  <body>
+    <div class="overlay">
+      <div class="modal-box">
+        <button class="close-btn">✕</button>
+        <h2>Instructions for use<br />TaskCounter</h2>
+        <br />
+        <p>
+          A simple web app for adding, deleting, and tracking daily tasks.
+          <br />It allows you to track, view, and delete tasks throughout the day, 
+          <br/> as well as see the current number of active tasks.<br />
+        </p>
+        <!-- <div class="box-info"> -->
+          <div class="task_field">
+            <h2>To-do list.</h2><br />Opposite each task there will be a small square.<br />Check the box next to the task you want to delete.<br />It will appear in the input field.
+            <br />Click the "minus" sign - the task will disappear from the list and the counter will decrease.
+          </div>
+          <div class="input_field">Enter the task text in the input field.</div>
+          <div class="info-btn-minus">
+            If you accidentally entered something incorrectly,
+press the minus sign and the text will be deleted.
+          </div>
+          <div class="info-btn-plus">
+Click the plus button.<br />The task will be added to the top
+list,<br />the counter will increase by 1.
+          </div>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <div id="root">
+      <header class="header">
+        <img src="./assets/logo.jpg" alt="logo" class="logo" />
+      </header>
+
+      <main class="main">
+        <div class="info">
+          <div class="tasks"></div>
+          <button id="open-btn">
+            <img class="instructions" src="./assets/info.png" />
+          </button>
+        </div>
+        <input class="input" placeholder="Enter your task" type="text" />
+        <h2 class="number"></h2>
+        <div class="buttons">
+          <button type="button" class="btn-minus" id="btn">-</button>
+          <button type="button" class="btn-plus" id="btn">+</button>
+        </div>
+
+        
+      </main>
+
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-section">
+            <h3>TaskCounter</h3>
+       
+          </div>
+
+          <div class="footer-section">
+            <h4>Adresse</h4>
+            <p>Musterstrasse 22</p>
+            <p>123456 Musterstadt</p>
+          </div>
+
+          <div class="footer-section">
+            <h4>Kontakt</h4>
+            <p>info@musterfirma.de</p>
+            <p>Tel. +49 123 234 345</p>
+          </div>
+
+          <div class="footer-section">
+            <h4>Folgen Sie uns</h4>
+            <div class="social-icons">
+              <a href="#">🌐</a>
+              <a href="#">📸</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2025 TaskCounter</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
