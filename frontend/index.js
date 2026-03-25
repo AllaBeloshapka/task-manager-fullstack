@@ -6,6 +6,7 @@ const FILTER_BTN = document.querySelector("#filter-btn");
 const CLEAR_BTN = document.querySelector("#clear-btn");
 const NUMBER = document.querySelector(".number");
 
+
 const BTN_MINUS = document.querySelector(".btn-minus");
 const BTN_PLUS = document.querySelector(".btn-plus");
 const BTN_UPDATE = document.querySelector(".btn-update");
@@ -86,6 +87,18 @@ INPUT_FILTER.addEventListener("input", () => {
   }
 });
 
+/*показать тост при отсутствии результатов*/
+const TOAST = document.getElementById("toast");
+
+function showToast(message) {
+  TOAST.textContent = message;
+  TOAST.classList.add("show");
+
+  setTimeout(() => {
+    TOAST.classList.remove("show");
+  }, 2000);
+}
+
 async function searchTasks() {
   const keyword = INPUT_FILTER.value.trim();
 
@@ -100,6 +113,13 @@ async function searchTasks() {
     );
 
     const data = await response.json();
+
+    // Если массив пустой, показать тост и очистить отображение задач
+    if (!Array.isArray(data) || data.length === 0) {
+      renderTasks([]);
+      showToast("Задача не найдена");
+      return;
+    }
 
     renderTasks(data);
 
