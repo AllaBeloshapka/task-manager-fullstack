@@ -4,6 +4,10 @@ const INPUT = document.querySelector(".input");
 const NUMBER = document.querySelector(".number");
 const BTN_MINUS = document.querySelector(".btn-minus");
 const BTN_PLUS = document.querySelector(".btn-plus");
+const BTN_UPDATE = document.querySelector(".btn-update");
+
+
+let editingTaskId = null;
 
 // теперь тут объекты
 let tasksArray = [];
@@ -77,6 +81,45 @@ BTN_PLUS.addEventListener("click", async () => {
     updateTasks();
   } catch (error) {
     console.error("Ошибка добавления:", error);
+  }
+
+  INPUT.focus();
+});
+
+// ✏️ обновить задачу (PUT)
+BTN_UPDATE.addEventListener("click", async () => {
+  const id = INPUT.dataset.id;
+  const updatedTitle = INPUT.value.trim();
+  if (!id || !updatedTitle) {
+    INPUT.value = "";
+    delete INPUT.dataset.id;
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8080/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: updatedTitle
+      })
+    });
+
+    const updatedTask = await response.json();
+
+    const taskIndex = tasksArray.findIndex(task => task.id == id);
+    if (taskIndex !== -1) {
+      tasksArray[taskIndex] = updatedTask;
+    }
+
+    INPUT.value = "";
+    delete INPUT.dataset.id;
+
+    updateTasks();
+  } catch (error) {
+    console.error("Ошибка обновления:", error);
   }
 
   INPUT.focus();
