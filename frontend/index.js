@@ -3,6 +3,7 @@ const TASKS = document.querySelector(".tasks");
 const INPUT = document.querySelector(".input");
 const INPUT_FILTER = document.querySelector(".input_filter");
 const FILTER_BTN = document.querySelector("#filter-btn");
+const CLEAR_BTN = document.querySelector("#clear-btn");
 const NUMBER = document.querySelector(".number");
 
 const BTN_MINUS = document.querySelector(".btn-minus");
@@ -63,10 +64,31 @@ async function loadTasks() {
 // =======================
 // 🔍 ПОИСК (через backend)
 // =======================
+
+// скрываем крестик при старте
+CLEAR_BTN.style.display = "none";
+
+// Очистка поля поиска и отображение всех задач
+CLEAR_BTN.addEventListener("click", () => {
+  INPUT_FILTER.value = "";
+  renderTasks(tasksArray);
+  CLEAR_BTN.style.display = "none";
+  INPUT_FILTER.focus();
+});
+
+// Показать кнопку очистки при вводе текста
+INPUT_FILTER.addEventListener("input", () => {
+  if (INPUT_FILTER.value.trim() === "") {
+    renderTasks(tasksArray);
+    CLEAR_BTN.style.display = "none";
+  } else {
+    CLEAR_BTN.style.display = "inline-block";
+  }
+});
+
 async function searchTasks() {
   const keyword = INPUT_FILTER.value.trim();
 
-  // 🔥 ВОТ РЕШЕНИЕ
   if (!keyword) {
     renderTasks(tasksArray);
     return;
@@ -86,6 +108,7 @@ async function searchTasks() {
   }
 }
 
+// Вывод всех задач при очистке поля поиска
 INPUT_FILTER.addEventListener("input", () => {
   if (INPUT_FILTER.value.trim() === "") {
     renderTasks(tasksArray);

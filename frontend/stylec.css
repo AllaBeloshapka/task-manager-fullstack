@@ -73,6 +73,15 @@ a {
   border: none;
 }
 
+#clear-btn {
+  width: 30px;
+  background-color: #132c28;
+  border: none;
+  color: white;
+  position: relative;
+  bottom: 15px;
+}
+
 #filter-btn {
   background: none;
   border: none;
