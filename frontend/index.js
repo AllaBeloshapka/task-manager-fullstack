@@ -66,7 +66,7 @@ async function loadTasks() {
 async function searchTasks() {
   const keyword = INPUT_FILTER.value.trim();
 
-  // если пусто — показать все задачи
+  // 🔥 ВОТ РЕШЕНИЕ
   if (!keyword) {
     renderTasks(tasksArray);
     return;
@@ -80,10 +80,17 @@ async function searchTasks() {
     const data = await response.json();
 
     renderTasks(data);
+
   } catch (error) {
     console.error("Ошибка поиска:", error);
   }
 }
+
+INPUT_FILTER.addEventListener("input", () => {
+  if (INPUT_FILTER.value.trim() === "") {
+    renderTasks(tasksArray);
+  }
+});
 
 // =======================
 // 🔘 КНОПКА ПОИСКА
