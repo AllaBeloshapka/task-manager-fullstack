@@ -11,14 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.example.taskmanagerapi.repository.UserRepository;
 
-import jakarta.validation.Valid;
-
 import java.util.List;
 
 /**
  * Controller for task-related endpoints.
  * All endpoints require authentication.
  */
+
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
