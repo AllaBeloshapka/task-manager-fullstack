@@ -1,170 +1,93 @@
-# TaskManager API
+# Task Manager (Fullstack)
 
-## Overview
-TaskManager API is a backend application built with Spring Boot that allows users to manage their tasks.
+A fullstack application for managing tasks with search, filtering, and CRUD operations.  
+The project demonstrates integration between frontend and backend, as well as clean separation of concerns.
 
-The project demonstrates:
-- REST API design
-- secure authentication with Spring Security
-- flexible filtering logic
-- clean layered architecture (Controller → Service → Repository)
+## Technologies
 
-Each user can access only their own tasks, ensuring data isolation and security.
-
----
-
-## Features
-- User authentication (Basic Auth via Spring Security)
-- Create, update, delete tasks
-- Get all tasks for the current authenticated user
-- Flexible filtering:
-    - by status
-    - by keyword
-    - combined filters (status + keyword)
-- DTO-based data validation and API responses
-- Custom exception handling:
-    - 400 Bad Request
-    - 401 Unauthorized
-    - 403 Forbidden
-    - 404 Not Found
-    - 500 Internal Server Error
-
----
-
-## Tech Stack
-- Java 23
+### Backend
+- Java
 - Spring Boot
 - Spring Security
-- Spring Data JPA
-- H2 Database (in-memory)
-- Maven
-- Postman
+- JPA / Hibernate
+- H2 Database
 
----
+### Frontend
+- JavaScript (Vanilla)
+- HTML / CSS
 
-## Architecture
-The project follows a clean layered architecture:
+## Features
 
-Controller → handles HTTP requests  
-Service → contains business logic  
-Repository → works with database
+### Task Management
+- Create tasks
+- Update tasks
+- Delete tasks
+- View all tasks
 
-Additional layers:
-- DTO → separates internal models from API responses
-- Security → handles authentication and user details
-- Exception → custom error handling
+### Search and Filtering
+- Backend-driven search by keyword
+- Dynamic rendering of results
+- Clear search functionality
+- Notification when no tasks are found
 
----
+## Implementation Details
 
-## Project Structure
+- Search is implemented via backend endpoint:
+  GET /tasks?keyword=...
+- Clear separation of responsibilities:
+  - Backend handles data and business logic
+  - Frontend handles UI and interaction
+- Graceful handling of empty states and errors
+- Improved user experience with:
+  - Clear search button
+  - Toast notifications
 
-```
-com.example.taskmanagerapi
-├── config
-├── controller
-├── dto
-├── entity
-├── enums
-├── exception
-├── repository
-├── security
-├── service
-```
+## Running the Project
 
----
+### Backend
+
+1. Run the Spring Boot application
+2. Server will be available at:
+   http://localhost:8080
+
+### Frontend
+
+1. Open index.html in a browser  
+   or use Live Server
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|------|--------|-------------|
-| POST | /tasks | Create task |
-| GET | /tasks | Get all tasks |
-| GET | /tasks?status=NEW | Filter by status |
-| GET | /tasks?keyword=task | Filter by keyword |
-| GET | /tasks?status=NEW&keyword=task | Combined filter |
-| PUT | /tasks/{id} | Update task |
-| DELETE | /tasks/{id} | Delete task |
+Get all tasks:
+GET /tasks
 
----
-
-## Example Request
-
-```
+Search tasks:
 GET /tasks?keyword=task
-```
 
-## Example Response
+Create task:
+POST /tasks
 
-```json
-{
-  "id": 1,
-  "title": "Buy milk",
-  "status": "NEW"
-}
-```
+Update task:
+PUT /tasks/{id}
 
----
+Delete task:
+DELETE /tasks/{id}
 
-## Security
-- Basic Authentication is used
-- Each request requires authorization
-- Users can only access their own tasks
+## Project Goal
 
----
+This project was built to demonstrate:
+- Fullstack integration
+- REST API usage
+- CRUD application design
+- UI interaction and state management
 
-## How to Run
+## Future Improvements
 
-```bash
-git clone <your-repo-url>
-cd taskmanager-api
-mvn spring-boot:run
-```
+- User authentication
+- Responsive design
+- Migration to React
+- Filtering by status
 
-Application will start at:
-```
-http://localhost:8080
-```
+## Author
 
----
-
-## Testing
-The API was tested using Postman:
-- Authentication via Basic Auth
-- Filtering logic verification
-- Edge cases and error handling
-
----
-
-## What I Learned
-- Building REST APIs with Spring Boot
-- Designing layered backend architecture
-- Implementing filtering logic with Spring Data JPA
-- Working with Spring Security (authentication & authorization)
-- Debugging common backend errors (401, 403, 404, 400, 500)
-
----
-
-## Status
-Project is fully functional and tested.
-
----
-
-## Screenshots
-
-### User Registration
-![User Registration](screenshots/register.png)
-
-### Create Task
-![Create Task](screenshots/create-task.png)
-
-### Get All Tasks
-![Get Tasks](screenshots/get-tasks.png)
-
-### Filter Tasks (by status)
-![Filter Tasks](screenshots/filter-status.png)
-
-### Update Task
-![Update Task](screenshots/update-task.png)
-
-### Error Handling (400 Bad Request)
-![Error 400](screenshots/error-400.png)# task-manager-fullstack
+Alla Beloshapka  
+Junior Fullstack Developer
