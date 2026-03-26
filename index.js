@@ -1,20 +1,34 @@
+// Main layout container
 const MAIN = document.querySelector(".main");
+
+// Container where tasks are rendered
 const TASKS = document.querySelector(".tasks");
+
+// Input field for creating and updating tasks
 const INPUT = document.querySelector(".input");
+
+// Input field for filtering tasks
 const INPUT_FILTER = document.querySelector(".input_filter");
+
+// Search button
 const FILTER_BTN = document.querySelector("#filter-btn");
+
+// Clear filter button
 const CLEAR_BTN = document.querySelector("#clear-btn");
+
+// Element displaying the number of active tasks
 const NUMBER = document.querySelector(".number");
 
-
+// Action buttons
 const BTN_MINUS = document.querySelector(".btn-minus");
 const BTN_PLUS = document.querySelector(".btn-plus");
 const BTN_UPDATE = document.querySelector(".btn-update");
 
+// Local state storing all tasks
 let tasksArray = [];
 
 // =======================
-// 🔹 РЕНДЕР
+// Render tasks to the DOM
 // =======================
 function renderTasks(tasks) {
   TASKS.innerHTML = "";
@@ -26,6 +40,7 @@ function renderTasks(tasks) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
+    // When checkbox is selected, fill input with task data for update or delete
     checkbox.addEventListener("change", () => {
       if (checkbox.checked) {
         INPUT.value = task.title;
@@ -44,11 +59,12 @@ function renderTasks(tasks) {
     TASKS.appendChild(taskItem);
   });
 
+  // Update task counter
   NUMBER.textContent = tasks.length;
 }
 
 // =======================
-// 🔹 ЗАГРУЗКА С BACKEND
+// Load tasks from backend
 // =======================
 async function loadTasks() {
   try {
@@ -58,18 +74,18 @@ async function loadTasks() {
     tasksArray = data;
     renderTasks(tasksArray);
   } catch (error) {
-    console.error("Ошибка загрузки задач:", error);
+    console.error("Error loading tasks:", error);
   }
 }
 
 // =======================
-// 🔍 ПОИСК (через backend)
+// Search functionality via backend
 // =======================
 
-// скрываем крестик при старте
+// Hide clear button on initial load
 CLEAR_BTN.style.display = "none";
 
-// Очистка поля поиска и отображение всех задач
+// Clear search input and restore full task list
 CLEAR_BTN.addEventListener("click", () => {
   INPUT_FILTER.value = "";
   renderTasks(tasksArray);
@@ -77,7 +93,7 @@ CLEAR_BTN.addEventListener("click", () => {
   INPUT_FILTER.focus();
 });
 
-// Показать кнопку очистки при вводе текста
+// Toggle clear button visibility based on input content
 INPUT_FILTER.addEventListener("input", () => {
   if (INPUT_FILTER.value.trim() === "") {
     renderTasks(tasksArray);
@@ -87,9 +103,10 @@ INPUT_FILTER.addEventListener("input", () => {
   }
 });
 
-/*показать тост при отсутствии результатов*/
+// Toast element for user notifications
 const TOAST = document.getElementById("toast");
 
+// Display temporary notification message
 function showToast(message) {
   TOAST.textContent = message;
   TOAST.classList.add("show");
@@ -99,9 +116,11 @@ function showToast(message) {
   }, 2000);
 }
 
+// Perform search request to backend
 async function searchTasks() {
   const keyword = INPUT_FILTER.value.trim();
 
+  // If input is empty, show all tasks
   if (!keyword) {
     renderTasks(tasksArray);
     return;
@@ -114,7 +133,7 @@ async function searchTasks() {
 
     const data = await response.json();
 
-    // Если массив пустой, показать тост и очистить отображение задач
+    // If no results, clear list and notify user
     if (!Array.isArray(data) || data.length === 0) {
       renderTasks([]);
       showToast("Задача не найдена");
@@ -124,11 +143,11 @@ async function searchTasks() {
     renderTasks(data);
 
   } catch (error) {
-    console.error("Ошибка поиска:", error);
+    console.error("Error during search:", error);
   }
 }
 
-// Вывод всех задач при очистке поля поиска
+// Restore full list when search input is cleared
 INPUT_FILTER.addEventListener("input", () => {
   if (INPUT_FILTER.value.trim() === "") {
     renderTasks(tasksArray);
@@ -136,14 +155,14 @@ INPUT_FILTER.addEventListener("input", () => {
 });
 
 // =======================
-// 🔘 КНОПКА ПОИСКА
+// Search button click
 // =======================
 FILTER_BTN.addEventListener("click", () => {
   searchTasks();
 });
 
 // =======================
-// ⌨️ ENTER ДЛЯ ПОИСКА
+// Trigger search on Enter key
 // =======================
 INPUT_FILTER.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -152,7 +171,7 @@ INPUT_FILTER.addEventListener("keydown", (event) => {
 });
 
 // =======================
-// ➕ ДОБАВИТЬ
+// Create new task
 // =======================
 BTN_PLUS.addEventListener("click", async () => {
   const task = INPUT.value.trim();
@@ -169,24 +188,26 @@ BTN_PLUS.addEventListener("click", async () => {
 
     const newTask = await response.json();
 
+    // Update local state
     tasksArray.push(newTask);
 
     INPUT.value = "";
     renderTasks(tasksArray);
   } catch (error) {
-    console.error("Ошибка добавления:", error);
+    console.error("Error creating task:", error);
   }
 
   INPUT.focus();
 });
 
 // =======================
-// ✏️ ОБНОВИТЬ
+// Update existing task
 // =======================
 BTN_UPDATE.addEventListener("click", async () => {
   const id = INPUT.dataset.id;
   const updatedTitle = INPUT.value.trim();
 
+  // If no selected task or empty input, reset state
   if (!id || !updatedTitle) {
     INPUT.value = "";
     delete INPUT.dataset.id;
@@ -204,6 +225,7 @@ BTN_UPDATE.addEventListener("click", async () => {
 
     const updatedTask = await response.json();
 
+    // Sync local state with updated task
     const index = tasksArray.findIndex(task => task.id == id);
     if (index !== -1) {
       tasksArray[index] = updatedTask;
@@ -214,18 +236,19 @@ BTN_UPDATE.addEventListener("click", async () => {
 
     renderTasks(tasksArray);
   } catch (error) {
-    console.error("Ошибка обновления:", error);
+    console.error("Error updating task:", error);
   }
 
   INPUT.focus();
 });
 
 // =======================
-// ❌ УДАЛИТЬ
+// Delete selected task
 // =======================
 BTN_MINUS.addEventListener("click", async () => {
   const id = INPUT.dataset.id;
 
+  // If no task selected, just clear input
   if (!id) {
     INPUT.value = "";
     return;
@@ -236,6 +259,7 @@ BTN_MINUS.addEventListener("click", async () => {
       method: "DELETE"
     });
 
+    // Remove task from local state
     tasksArray = tasksArray.filter(task => task.id != id);
 
     INPUT.value = "";
@@ -243,32 +267,35 @@ BTN_MINUS.addEventListener("click", async () => {
 
     renderTasks(tasksArray);
   } catch (error) {
-    console.error("Ошибка удаления:", error);
+    console.error("Error deleting task:", error);
   }
 
   INPUT.focus();
 });
 
 // =======================
-// 🚀 СТАРТ
+// Application entry point
 // =======================
 loadTasks();
 
 // =======================
-// ℹ️ ИНСТРУКЦИИ
+// Modal instructions logic
 // =======================
 const overlay = document.querySelector(".overlay");
 const openBtn = document.querySelector("#open-btn");
 const closeBtn = document.querySelector(".close-btn");
 
+// Open instructions modal
 openBtn.addEventListener("click", () => {
   overlay.style.display = "flex";
 });
 
+// Close modal via button
 closeBtn.addEventListener("click", () => {
   overlay.style.display = "none";
 });
 
+// Close modal when clicking outside content
 overlay.addEventListener("click", (event) => {
   if (event.target === overlay) {
     overlay.style.display = "none";

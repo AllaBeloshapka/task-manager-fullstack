@@ -1,92 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Main JS file is loaded with defer to ensure DOM is ready before execution -->
     <script src="index.js" defer></script>
+
+    <!-- Global styles for the application -->
     <link rel="stylesheet" href="stylec.css" type="text/css" />
+
+    <!-- Basic meta setup -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>TaskCounter</title>
   </head>
   <body>
+    <!-- Modal overlay for user instructions -->
     <div class="overlay">
       <div class="modal-box">
+        <!-- Close button for modal -->
         <button class="close-btn">✕</button>
+
         <h2>Instructions for use<br />TaskCounter</h2>
         <br />
+
+        <!-- App description -->
         <p>
           A simple web app for adding, deleting, and tracking daily tasks.
           <br />It allows you to track, view, and delete tasks throughout the day, 
           <br/> as well as see the current number of active tasks.<br />
         </p>
         
-          <div class="task_field">
-            <h2>To-do list.</h2><br />Opposite each task there will be a small square.<br />Check the box next to the task you want to delete.<br />It will appear in the input field.
-            <br />Click the "minus" sign - the task will disappear from the list and the counter will decrease.
-          </div>
-          <div class="input_field">Enter the task text in the input field.</div>
-          <!-- <div class="info-btn-minus">
-            If you accidentally entered something incorrectly,
-press the minus sign and the text will be deleted.
-          </div>
-          <div class="info-btn-plus">
-Click the plus button.<br />The task will be added to the top
-list,<br />the counter will increase by 1.
-          </div> -->
-        
+        <!-- Task interaction instructions -->
+        <div class="task_field">
+          <h2>To-do list.</h2><br />
+          Opposite each task there will be a small square.<br />
+          Check the box next to the task you want to delete.<br />
+          It will appear in the input field.
+          <br />
+          Click the "minus" sign - the task will disappear from the list and the counter will decrease.
+        </div>
+
+        <!-- Input usage hint -->
+        <div class="input_field">
+          Enter the task text in the input field.
+        </div>
+
+        <!-- Legacy instructions (kept for potential reuse) -->
+        <!-- 
+        <div class="info-btn-minus">
+          If you accidentally entered something incorrectly,
+          press the minus sign and the text will be deleted.
+        </div>
+
+        <div class="info-btn-plus">
+          Click the plus button.<br />
+          The task will be added to the top list,<br />
+          the counter will increase by 1.
+        </div> 
+        -->
       </div>
     </div>
 
+    <!-- Root container of the application -->
     <div id="root">
       <header class="header">
+        <!-- App logo -->
         <img src="./assets/logo.jpg" alt="logo" class="logo" />
-       <div class="search-container">
-        <button id="clear-btn">✕</button>
-        <input class="input_filter" />
-        <div id="toast" class="toast">Задача не найдена</div>
-        <button id="filter-btn">
+
+        <!-- Search / filter section -->
+        <div class="search-container">
+          <!-- Clear input button -->
+          <button id="clear-btn">✕</button>
+
+          <!-- Input for filtering tasks -->
+          <input class="input_filter" />
+
+          <!-- Toast notification (e.g. when no results found) -->
+          <div id="toast" class="toast">Задача не найдена</div>
+
+          <!-- Trigger search -->
+          <button id="filter-btn">
             <img class="search" src="./assets/zoomi.png" />
           </button>
         </div>
       </header>
 
-
       <main class="main">
         <div class="info">
+          <!-- Container where tasks are dynamically rendered -->
           <div class="tasks"></div>
+
+          <!-- Open instructions modal -->
           <button id="open-btn">
             <img class="instructions" src="./assets/info.png" />
           </button>
         </div>
+
+        <!-- Main input for adding/updating tasks -->
         <input class="input" placeholder="Enter your task" type="text" />
+
+        <!-- Dynamic counter of active tasks -->
         <h2 class="number"></h2>
+
+        <!-- Action buttons -->
         <div class="buttons">
+          <!-- Delete selected task -->
           <button type="button" class="btn-minus" id="btn">DELETE</button>
+
+          <!-- Add new task -->
           <button type="button" class="btn-plus" id="btn">ADD</button>
+
+          <!-- Update existing task -->
           <button type="button" class="btn-update" id="btn">UPDATE</button>
         </div>
-
-        
       </main>
 
       <footer class="footer">
         <div class="footer-container">
           <div class="footer-section">
             <h3>TaskCounter</h3>
-       
           </div>
 
+          <!-- Address block -->
           <div class="footer-section">
             <h4>Adresse</h4>
             <p>Musterstrasse 22</p>
             <p>123456 Musterstadt</p>
           </div>
 
+          <!-- Contact block -->
           <div class="footer-section">
             <h4>Kontakt</h4>
             <p>info@musterfirma.de</p>
             <p>Tel. +49 123 234 345</p>
           </div>
 
+          <!-- Social links -->
           <div class="footer-section">
             <h4>Folgen Sie uns</h4>
             <div class="social-icons">
@@ -96,6 +145,7 @@ list,<br />the counter will increase by 1.
           </div>
         </div>
 
+        <!-- Footer bottom -->
         <div class="footer-bottom">
           <p>© 2025 TaskCounter</p>
         </div>

@@ -1,13 +1,16 @@
+/* Apply consistent box model across all elements */
 * {
   box-sizing: border-box;
 }
 
+/* Reset default margins and ensure full height layout */
 html,
 body {
   height: 100%;
   margin: 0;
 }
 
+/* Reset default spacing for text elements */
 h1,
 h2,
 h3,
@@ -19,17 +22,20 @@ li {
   margin: 0;
   padding: 0;
 }
+
+/* Remove default link underline */
 a {
   text-decoration: none;
 }
 
+/* Root container for full page layout using flex */
 #root {
   min-height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* шапка */
+/* Header section with centered content */
 .header {
   display: flex;
   justify-content: center;
@@ -39,22 +45,24 @@ a {
   height: 200px;
 }
 
-/* логотип */
+/* Logo styling and positioning */
 .logo {
   position: absolute;
   width: 40%;
   box-shadow: -15px 25px 25px black;
 }
 
+/* Container for search input and controls aligned to the right */
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: auto; /* отодвигает контейнер к правому краю */
-  margin-right: 20px; /* отступ от правого края */
+  margin-left: auto;
+  margin-right: 20px;
   top: -20px;
 }
 
+/* Input field for filtering tasks */
 .input_filter {
   position: relative;
   width: 300px;
@@ -66,6 +74,7 @@ a {
   box-shadow: inset 0 5px 15px black;
 }
 
+/* Search icon inside the button */
 .search {
   position: relative;
   width: 50px;
@@ -73,6 +82,7 @@ a {
   border: none;
 }
 
+/* Button to clear filter input */
 #clear-btn {
   width: 30px;
   background-color: #132c28;
@@ -82,6 +92,7 @@ a {
   bottom: 15px;
 }
 
+/* Search button styling */
 #filter-btn {
   background: none;
   border: none;
@@ -94,11 +105,12 @@ a {
   box-shadow: inset 0 5px 15px #132c28;
 }
 
+/* Hover state for search button */
 #filter-btn:hover {
-  background-color: #286659; /* эффект при наведении */
+  background-color: #286659;
 }
 
-/* задача не найдена */
+/* Toast notification displayed when no tasks are found */
 .toast {
   position: fixed;
   top: 20px;
@@ -116,17 +128,18 @@ a {
   z-index: 1000;
 }
 
+/* Visible state of toast notification */
 .toast.show {
   opacity: 1;
 }
 
-/* НЕМНОГО АДАПТИВА ДЛЯ МАЛЫХ ЭКРАНОВ */
+/* Basic responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-  .header { padding: 12px; }     /* ДОБАВЛЕНО */
-  .logo { max-width: 90vw; }     /* ДОБАВЛЕНО: логотип не шире области просмотра */
+  .header { padding: 12px; }
+  .logo { max-width: 90vw; }
 }
 
-/* основное поле  */
+/* Main content area */
 .main {
   flex: 1;
   display: flex;
@@ -139,7 +152,7 @@ a {
   color: white;
 }
 
-/* поле для всех задач */
+/* Container displaying the list of tasks */
 .tasks {
   width: 60%;
   height: 300px;
@@ -152,7 +165,7 @@ a {
   overflow-y: auto;
 }
 
-/* блок с инструкцией модального окна */
+/* Wrapper for tasks list and instruction button */
 .info {
   display: flex;
   flex-direction: row;
@@ -161,14 +174,14 @@ a {
   padding-left: 3%;
 }
 
-/* значёк на кнопке с инсрукцией */
+/* Icon inside the instructions button */
 .instructions {
   width: 30px;
   height: 30px;
 }
 
-/* кнопка для получения инструкции */
-#open-btn{
+/* Button to open instructions modal */
+#open-btn {
   width: 40px;
   height: 40px;
   background: #153e3a;
@@ -177,11 +190,12 @@ a {
   align-items: center;
 }
 
-#open-btn:hover{
-  background-color: #286659; /* эффект при наведении */
+/* Hover state for instructions button */
+#open-btn:hover {
+  background-color: #286659;
 }
 
-/* поле ввода задачи */
+/* Input field for creating or updating tasks */
 .input {
   width: 55%;
   height: 70px;
@@ -195,47 +209,48 @@ a {
   margin-top: 20px;
 }
 
-/* блок кнопок плюс и минус */
+/* Container for action buttons */
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: center; /* выравнивает кнопки по центру */
-  gap: 30px; /* расстояние между кнопками */
+  justify-content: center;
+  gap: 30px;
   margin-top: 5px;
   padding: 10px;
 }
 
-/* кнопки */
+/* Shared button styling */
 #btn {
-  width: 150px;         /* ← длина кнопки */
-  height: 50px;         /* ← высота кнопки */
-  font-size: 20px;      /* размер текста */
-  border-radius: 10px;  /* скруглённые углы (по желанию) */
-  background-color: #34534a; /* цвет кнопки */
+  width: 150px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 10px;
+  background-color: #34534a;
   color: rgb(250, 249, 249);
   border: none;
   box-shadow: inset 5px 0 10px black;
-  }
-
-#btn:hover {
-  background-color: #286659; /* эффект при наведении */
 }
 
-/* затемняющий фон на весь экран */
+/* Hover state for buttons */
+#btn:hover {
+  background-color: #286659;
+}
+
+/* Full screen overlay for modal */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
-  display: none; /* изначально скрыт */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
 
-/* рамка модального окна с инструкцией */
+/* Modal container for instructions */
 .modal-box {
   position: relative;
   display: flex;
@@ -244,7 +259,7 @@ a {
   height: 100%;
   border: 2px solid white;
   background-color: transparent;
-  backdrop-filter: blur(1px); /* красивое размытие позади */
+  backdrop-filter: blur(1px);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   border-radius: 15px;
   padding: 20px;
@@ -252,7 +267,7 @@ a {
   color: white;
 }
 
-/* крестик в правом верхнем углу модального окна */
+/* Close button inside modal */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -264,41 +279,42 @@ a {
   border: none;
 }
 
+/* Hover state for close button */
 .close-btn:hover {
   color: red;
 }
 
-/* инструкция к кнопке "плюс" */
-.info-btn-plus{
+/* Positioning for plus button instruction text */
+.info-btn-plus {
   position: relative;
   width: 300px;
   top: 28%;
   left: 63%;
 }
 
-/* инструкция к кнопке "минус" */
-.info-btn-minus{
+/* Positioning for minus button instruction text */
+.info-btn-minus {
   position: relative;
   width: 300px;
   top: 38%;
   left: 15%;
 }
 
-/* инструкция к полю для ввода */
-.input_field{
+/* Positioning for input field instruction */
+.input_field {
   position: relative;
   top: 20%;
   left: 1%;
 }
 
-/* инструкция к списку задач */
-.task_field{
+/* Positioning for task list instruction */
+.task_field {
   position: relative;
   top: 10%;
   left: 25%;
 }
 
-/* подвал */
+/* Footer styling */
 .footer {
   background-color: #0f2c29;
   color: #99b8b5;
@@ -306,6 +322,7 @@ a {
   font-family: Arial, sans-serif;
 }
 
+/* Layout container for footer sections */
 .footer-container {
   display: flex;
   justify-content: space-between;
@@ -314,21 +331,25 @@ a {
   margin: 0 auto;
 }
 
+/* Footer section titles */
 .footer-section h3,
 .footer-section h4 {
   color: #ffffff;
   margin-bottom: 10px;
 }
 
+/* Footer text styling */
 .footer-section p {
   margin: 4px 0;
   color: #99b8b5;
 }
 
+/* Social icon links */
 .social-icons a {
   font-size: 20px;
 }
 
+/* Bottom footer bar */
 .footer-bottom {
   background-color: #153e3a;
   text-align: center;
