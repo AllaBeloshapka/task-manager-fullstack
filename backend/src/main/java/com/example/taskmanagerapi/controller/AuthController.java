@@ -10,31 +10,50 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 /**
- * Controller for authentication-related endpoints.
- * Handles user registration.
+ * REST controller responsible for authentication-related operations.
+ * Currently supports user registration and a simple health-check endpoint.
  */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
+    // Service layer dependency for user-related business logic
     private final UserService userService;
 
     /**
-     * Registers a new user.
+     * Simple test endpoint to verify that the controller is reachable.
+     * Useful for quick checks during development or debugging.
+     *
+     * @return plain text confirmation message
      */
-
     @GetMapping("/test")
     public String test() {
         return "Auth controller works";
     }
 
+    /**
+     * Handles user registration.
+     *
+     * Flow:
+     * 1. Validates incoming request payload
+     * 2. Delegates user creation to the service layer
+     * 3. Maps the created entity to a response DTO
+     *
+     * Note:
+     * - Password hashing and validation should be handled in the service layer
+     * - This controller should remain thin and not contain business logic
+     *
+     * @param request validated registration request DTO
+     * @return UserResponse DTO with basic user information (no sensitive data)
+     */
     @PostMapping("/register")
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
 
+        // Delegate user creation to service layer
         User user = userService.register(request);
 
-        // Convert entity to response DTO
+        // Map entity to response DTO (manual mapping for now)
         UserResponse response = new UserResponse();
         response.setId(user.getId());
         response.setUsername(user.getUsername());

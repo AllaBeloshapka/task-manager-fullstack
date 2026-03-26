@@ -57,6 +57,9 @@ public class Task {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * Lifecycle callback - sets createdAt on insert.
+     */
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

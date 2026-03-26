@@ -5,6 +5,11 @@ package com.example.taskmanagerapi.exception;
  */
 public class UserAlreadyExistsException extends RuntimeException {
 
+    /**
+     * Constructs a UserAlreadyExistsException with the specified message.
+     *
+     * @param message the detail message
+     */
     public UserAlreadyExistsException(String message) {
         super(message);
     }

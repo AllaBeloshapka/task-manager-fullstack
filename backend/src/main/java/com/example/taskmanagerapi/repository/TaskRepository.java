@@ -12,10 +12,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // All queries are scoped by owner to ensure data isolation per user
     List<Task> findByOwner(User owner);
 
+    //All tasks of a user with a specific status
     List<Task> findByOwnerAndStatus(User owner, TaskStatus status);
 
+    //All tasks of a user with a specific title
     List<Task> findByOwnerAndTitleContainingIgnoreCase(User owner, String keyword);
 
+    //All tasks of a user with a specific status and title
     List<Task> findByOwnerAndStatusAndTitleContainingIgnoreCase(
             User owner,
             TaskStatus status,

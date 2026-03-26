@@ -5,6 +5,11 @@ package com.example.taskmanagerapi.exception;
  */
 public class AccessDeniedTaskException extends RuntimeException {
 
+    /**
+     * Constructs an AccessDeniedTaskException with the specified message.
+     *
+     * @param message the detail message
+     */
     public AccessDeniedTaskException(String message) {
         super(message);
     }

@@ -6,10 +6,10 @@ import com.example.taskmanagerapi.dto.TaskUpdateRequest;
 import com.example.taskmanagerapi.entity.Task;
 import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.enums.TaskStatus;
+import com.example.taskmanagerapi.repository.UserRepository;
 import com.example.taskmanagerapi.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.example.taskmanagerapi.repository.UserRepository;
 
 import java.util.List;
 
