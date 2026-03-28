@@ -8,6 +8,7 @@ import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.enums.TaskStatus;
 import com.example.taskmanagerapi.repository.UserRepository;
 import com.example.taskmanagerapi.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class TaskController {
      */
     @PostMapping
     public TaskResponse createTask(
-            @RequestBody TaskRequest request
+            @Valid @RequestBody TaskRequest request
     ) {
 
         User user = userRepository.findAll()
