@@ -68,7 +68,7 @@ function renderTasks(tasks) {
 // =======================
 async function loadTasks() {
   try {
-    const response = await fetch("http://localhost:8080/tasks");
+    const response = await fetch("http://localhost:8082/api/tasks");
     const data = await response.json();
 
     tasksArray = data;
@@ -128,7 +128,7 @@ async function searchTasks() {
 
   try {
     const response = await fetch(
-      `http://localhost:8080/tasks?keyword=${encodeURIComponent(keyword)}`
+      `http://localhost:8082/api/tasks?keyword=${encodeURIComponent(keyword)}`
     );
 
     const data = await response.json();
@@ -178,7 +178,7 @@ BTN_PLUS.addEventListener("click", async () => {
   if (!task) return;
 
   try {
-    const response = await fetch("http://localhost:8080/tasks", {
+    const response = await fetch("http://localhost:8082/api/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -215,7 +215,7 @@ BTN_UPDATE.addEventListener("click", async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/tasks/${id}`, {
+    const response = await fetch(`http://localhost:8082/api/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -255,7 +255,7 @@ BTN_MINUS.addEventListener("click", async () => {
   }
 
   try {
-    await fetch(`http://localhost:8080/tasks/${id}`, {
+    await fetch(`http://localhost:8082/api/tasks/${id}`, {
       method: "DELETE"
     });
 
