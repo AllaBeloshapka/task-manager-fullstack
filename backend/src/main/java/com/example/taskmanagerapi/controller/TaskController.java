@@ -8,16 +8,11 @@ import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.enums.TaskStatus;
 import com.example.taskmanagerapi.repository.UserRepository;
 import com.example.taskmanagerapi.service.TaskService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
-
-/**
- * Controller for task-related endpoints.
- * All endpoints require authentication.
- */
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -28,70 +23,40 @@ public class TaskController {
     private final UserRepository userRepository;
 
     /**
-     * Create a new task.
+     * Создание новой задачи.
+     * Теперь метод помечен @PostMapping и принимает только Body.
      */
     @PostMapping
-    public TaskResponse createTask(
-            @Valid @RequestBody TaskRequest request
-    ) {
-
-        User user = userRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No user found"));
-
+    public TaskResponse createTask(@RequestBody TaskRequest request, Principal principal) {
+        User user = getCurrentUser(principal); // Получаем текущего пользователя
         Task task = taskService.createTask(request, user);
-
         return mapToResponse(task);
     }
 
-    /**
-     * Update task.
-     */
     @PutMapping("/{id}")
     public TaskResponse updateTask(
             @PathVariable Long id,
-            @RequestBody TaskUpdateRequest request
+            @RequestBody TaskUpdateRequest request,
+            Principal principal
     ) {
-
-        User user = userRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No user found"));
-
+        User user = getCurrentUser(principal);
         Task updatedTask = taskService.updateTask(id, request, user);
-
         return mapToResponse(updatedTask);
     }
 
-    /**
-     * Delete task.
-     */
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
-
-        User user = userRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No user found"));
-
+    public void deleteTask(@PathVariable Long id, Principal principal) {
+        User user = getCurrentUser(principal);
         taskService.deleteTask(id, user);
     }
 
-    /**
-     * Get all tasks.
-     */
     @GetMapping
     public List<TaskResponse> getTasks(
             @RequestParam(required = false) TaskStatus status,
-            @RequestParam(required = false) String keyword
+            @RequestParam(required = false) String keyword,
+            Principal principal
     ) {
-
-        User user = userRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No user found"));
-
+        User user = getCurrentUser(principal);
         List<Task> tasks = taskService.filterTasks(user, status, keyword);
 
         return tasks.stream()
@@ -100,8 +65,18 @@ public class TaskController {
     }
 
     /**
-     * Convert Task to DTO.
+     * Временный метод для получения пользователя.
+     * В будущем здесь будет: SecurityContextHolder.getContext().getAuthentication()...
      */
+    private User getCurrentUser(Principal principal) {
+        if (principal == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+        String username = principal.getName(); // Получаем username из Basic Auth
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+    }
+
     private TaskResponse mapToResponse(Task task) {
         TaskResponse response = new TaskResponse();
         response.setId(task.getId());
