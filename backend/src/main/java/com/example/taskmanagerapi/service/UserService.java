@@ -74,6 +74,25 @@ public class UserService {
         return savedUser;
     }
 
+    public void resendVerification(String email) {
+
+        User user = userRepository.findByUsername(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = UUID.randomUUID().toString();
+        LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
+
+        EmailVerificationToken verificationToken = new EmailVerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(user);
+        verificationToken.setExpiryDate(expiryDate);
+        verificationToken.setUsed(false);
+
+        emailVerificationTokenRepository.save(verificationToken);
+
+        emailService.sendVerificationEmail(user.getUsername(), token);
+    }
+
     @PostConstruct
     public void initUser() {
         if (userRepository.count() == 0) {

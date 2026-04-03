@@ -83,4 +83,12 @@ public class AuthController {
         return "Email verified successfully";
     }
 
+    @PostMapping("/resend-verify")
+    public String resendVerification(@RequestParam String email) {
+
+        userService.resendVerification(email);
+
+        return "Verification email resent";
+    }
+
 }
