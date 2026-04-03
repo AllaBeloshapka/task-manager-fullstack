@@ -2,17 +2,19 @@ package com.example.taskmanagerapi.controller;
 
 import com.example.taskmanagerapi.dto.RegisterRequest;
 import com.example.taskmanagerapi.dto.UserResponse;
+import com.example.taskmanagerapi.entity.EmailVerificationToken;
 import com.example.taskmanagerapi.entity.User;
+import com.example.taskmanagerapi.repository.EmailVerificationTokenRepository;
+import com.example.taskmanagerapi.repository.UserRepository;
 import com.example.taskmanagerapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-/**
- * REST controller responsible for authentication-related operations.
- * Currently supports user registration and a simple health-check endpoint.
- */
+import java.time.LocalDateTime;
+
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -20,33 +22,15 @@ public class AuthController {
 
     // Service layer dependency for user-related business logic
     private final UserService userService;
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+    private final UserRepository userRepository;
 
-    /**
-     * Simple test endpoint to verify that the controller is reachable.
-     * Useful for quick checks during development or debugging.
-     *
-     * @return plain text confirmation message
-     */
     @GetMapping("/test")
     public String test() {
+
         return "Auth controller works";
     }
 
-    /**
-     * Handles user registration.
-     *
-     * Flow:
-     * 1. Validates incoming request payload
-     * 2. Delegates user creation to the service layer
-     * 3. Maps the created entity to a response DTO
-     *
-     * Note:
-     * - Password hashing and validation should be handled in the service layer
-     * - This controller should remain thin and not contain business logic
-     *
-     * @param request validated registration request DTO
-     * @return UserResponse DTO with basic user information (no sensitive data)
-     */
     @PostMapping("/register")
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
 
@@ -62,4 +46,41 @@ public class AuthController {
 
         return response;
     }
+
+    /*  Берёт токен из URL
+        Ищет его в базе
+        Проверяет:
+        не использован
+        не истёк
+        Берёт пользователя
+        Включает его (enabled = true)
+        Помечает токен как использованный
+        Сохраняет всё  */
+
+    @GetMapping("/verify")
+    public String verifyEmail(@RequestParam String token) {
+
+        EmailVerificationToken verificationToken = emailVerificationTokenRepository
+                .findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        if (verificationToken.getUsed()) {
+            throw new RuntimeException("Token already used");
+        }
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expired");
+        }
+
+        User user = verificationToken.getUser();
+        user.setEnabled(true);
+
+        verificationToken.setUsed(true);
+
+        userRepository.save(user);
+        emailVerificationTokenRepository.save(verificationToken);
+
+        return "Email verified successfully";
+    }
+
 }
