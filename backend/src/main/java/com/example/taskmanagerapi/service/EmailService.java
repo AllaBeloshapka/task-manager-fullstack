@@ -2,6 +2,7 @@ package com.example.taskmanagerapi.service;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -10,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 public class EmailService {
 
     private final JavaMailSender mailSender;
-
+    @Async
     public void sendVerificationEmail(String to, String token) {
 
-        String verifyUrl = "http://localhost:8080/api/auth/verify?token=" + token;
+        String verifyUrl = "http://localhost:8082/api/auth/verify?token=" + token;
 
         String subject = "Email verification";
         String text = "Click the link to verify your email:\n" + verifyUrl;

@@ -39,36 +39,43 @@ public class UserService {
 
     public User register(RegisterRequest request) {
 
-        // Check if username already exists
+        // 1. Проверяем, существует ли пользователь
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new UserAlreadyExistsException("Username already exists");
         }
 
-        // Create new user entity
+        // 2. Создаем сущность
         User user = new User();
         user.setUsername(request.getUsername());
 
-        // TODO: Encrypt password using PasswordEncoder before saving
+        // ВАЖНО: Добавьте эту строку, иначе email не сохранится в базу!
+        user.setEmail(request.getEmail());
+
+        // Кодируем пароль
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // Set default values
+        // Установка дефолтных значений
         user.setRole("ROLE_USER");
         user.setEnabled(false);
         user.setCreatedAt(LocalDateTime.now());
+
+        // Сохраняем пользователя
         User savedUser = userRepository.save(user);
-        //Сгенерировать токен
+
+        // 3. Работа с токеном
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
 
         EmailVerificationToken verificationToken = new EmailVerificationToken();
-
         verificationToken.setToken(token);
         verificationToken.setUser(savedUser);
         verificationToken.setExpiryDate(expiryDate);
         verificationToken.setUsed(false);
 
         emailVerificationTokenRepository.save(verificationToken);
-        emailService.sendVerificationEmail(savedUser.getUsername(), token);
+
+        // 4. Отправка почты (исправлено имя переменной на 'request')
+        emailService.sendVerificationEmail(request.getEmail(), token);
 
         return savedUser;
     }
@@ -97,7 +104,7 @@ public class UserService {
         if (userRepository.count() == 0) {
             User user = new User();
             user.setUsername("test");
-
+            user.setEmail("test@gmail.com");
             // TODO: Encrypt password before saving
             user.setPassword("1234");
 
@@ -106,9 +113,8 @@ public class UserService {
             user.setCreatedAt(LocalDateTime.now());
 
             userRepository.save(user);
+
         }
     }
-    //Сгенерировать токен
-    String token = UUID.randomUUID().toString();
-    LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
+
 }
