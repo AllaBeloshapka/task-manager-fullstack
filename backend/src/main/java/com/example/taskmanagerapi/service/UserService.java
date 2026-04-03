@@ -25,9 +25,8 @@ import java.util.UUID;
  * - Validates business rules (e.g. unique username)
  * - Prepares entity before persistence
  */
-@Entity
-@Getter
-@Setter
+
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
