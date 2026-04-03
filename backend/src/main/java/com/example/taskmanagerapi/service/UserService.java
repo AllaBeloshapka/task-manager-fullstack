@@ -1,15 +1,21 @@
 package com.example.taskmanagerapi.service;
 
 import com.example.taskmanagerapi.dto.RegisterRequest;
+import com.example.taskmanagerapi.entity.EmailVerificationToken;
 import com.example.taskmanagerapi.entity.User;
 import com.example.taskmanagerapi.exception.UserAlreadyExistsException;
+import com.example.taskmanagerapi.repository.EmailVerificationTokenRepository;
 import com.example.taskmanagerapi.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.Entity;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Service layer for user-related operations.
@@ -19,6 +25,9 @@ import java.time.LocalDateTime;
  * - Validates business rules (e.g. unique username)
  * - Prepares entity before persistence
  */
+@Entity
+@Getter
+@Setter
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,21 +35,8 @@ public class UserService {
     // Repository for user persistence operations
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    /**
-     * Registers a new user.
-     *
-     * Flow:
-     * - Validate uniqueness of username
-     * - Map request DTO to entity
-     * - Apply default values (role, enabled, createdAt)
-     * - Persist user
-     *
-     * Important:
-     * - Password must be encrypted before saving (currently NOT implemented)
-     *
-     * @param request registration data
-     * @return saved user entity
-     */
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+
     public User register(RegisterRequest request) {
 
         // Check if username already exists
@@ -57,21 +53,25 @@ public class UserService {
 
         // Set default values
         user.setRole("ROLE_USER");
-        user.setEnabled(true);
+        user.setEnabled(false);
         user.setCreatedAt(LocalDateTime.now());
+        User savedUser = userRepository.save(user);
+        //Сгенерировать токен
+        String token = UUID.randomUUID().toString();
+        LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
 
-        return userRepository.save(user);
+        EmailVerificationToken verificationToken = new EmailVerificationToken();
+
+        verificationToken.setToken(token);
+        verificationToken.setUser(savedUser);
+        verificationToken.setExpiryDate(expiryDate);
+        verificationToken.setUsed(false);
+
+        emailVerificationTokenRepository.save(verificationToken);
+
+        return savedUser;
     }
 
-    /**
-     * Initializes a default test user on application startup.
-     *
-     * Used for development and testing purposes.
-     *
-     * Note:
-     * - Should be removed or replaced in production
-     * - Password is stored in plain text (not secure)
-     */
     @PostConstruct
     public void initUser() {
         if (userRepository.count() == 0) {
@@ -88,4 +88,7 @@ public class UserService {
             userRepository.save(user);
         }
     }
+    //Сгенерировать токен
+    String token = UUID.randomUUID().toString();
+    LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
 }
