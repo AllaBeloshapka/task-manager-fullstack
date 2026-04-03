@@ -36,6 +36,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+    private final EmailService emailService;
 
     public User register(RegisterRequest request) {
 
@@ -68,6 +69,7 @@ public class UserService {
         verificationToken.setUsed(false);
 
         emailVerificationTokenRepository.save(verificationToken);
+        emailService.sendVerificationEmail(savedUser.getUsername(), token);
 
         return savedUser;
     }
